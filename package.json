@@ -1,11 +1,15 @@
 {
-  "name": "particles-life",
-  "version": "1.0.0",
-  "description": "Complex behaviour emerges from particles with defined simple rules of motion",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Aktyn",
-  "license": "UNLICENSED"
+	"name": "particles-life",
+	"version": "1.0.0",
+	"description": "Complex behaviour emerges from particles with defined simple rules of motion",
+	"main": "index.js",
+	"scripts": {
+		"start": "tsc -p tsconfig.json"
+	},
+	"author": "Aktyn",
+	"license": "UNLICENSED",
+	"devDependencies": {
+		"typescript": "^3.3.4000"
+	},
+	"dependencies": {}
 }

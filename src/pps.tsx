@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 const MAP_SIZE = 750;
 const PARTICLES_COUNT = 5000;
 const DEFAULT_MAX_PARTICLES = 6000;
@@ -228,57 +226,62 @@ class Simulation {
 	}
 }
 
-export default class extends React.Component<any, any> {
-	private canv: HTMLCanvasElement | null = null;
-	private simulation: Simulation | null = null;
+window.addEventListener('load', () => {
+	let max_particles = DEFAULT_MAX_PARTICLES;
 
-	private tout: number | null = null;
+	let page = document.getElementById('page');
+	if(!page)
+		return;
 
-	state = {
-		particles: 0,
-		max_particles: DEFAULT_MAX_PARTICLES
+	let canvas = document.createElement('canvas');
+	canvas.width = MAP_SIZE;
+	canvas.height = MAP_SIZE;
+	page.appendChild(canvas);
+
+	let simulation = new Simulation(canvas);
+	//let particles = simulation.particlesCount();
+
+	let span = document.createElement('span');
+	//@ts-ignore
+	span.style.float = 'right';
+	page.appendChild(span);
+
+	let particles_info = document.createElement('div');
+	
+	span.appendChild(particles_info);
+
+	let max_particles_container = document.createElement('div');
+	max_particles_container.innerText = 'Max particles: ';
+	span.appendChild(max_particles_container);
+
+	let max_particles_input = document.createElement('input');
+	max_particles_input.setAttribute('type', 'number');
+	max_particles_input.setAttribute('placeholder', 'max particles');
+	max_particles_input.setAttribute('value', max_particles.toString());
+
+	function updateMaxParticles(value: number) {
+		max_particles = value;
+		simulation.setMaxParticles(value);
+		//max_particles_input.setAttribute('value', max_particles.toString());
+	}
+
+	max_particles_input.addEventListener('change', event => {
+		//@ts-ignore
+		let v: number = event.target.value;
+		//this.setState({max_particles: v});
+		//if(this.simulation)
+		
+		updateMaxParticles(v);
+	});
+	max_particles_container.appendChild(max_particles_input);
+
+	
+
+	let increaseParticles = function() {
+		// particles = simulation.particlesCount();
+		particles_info.innerText = 'Particles: ' + simulation.particlesCount();
+		setTimeout(increaseParticles, 1000);
 	};
 
-	constructor(props: any) {
-		super(props);
-	}
-
-	componentDidMount() {
-		if(this.canv && !this.simulation) {
-			this.simulation = new Simulation(this.canv);
-			this.setState({particles: this.simulation.particlesCount()});
-		}
-	}
-
-	componentWillUnmount() {
-		if(this.simulation)
-			this.simulation.destroy();
-	}
-
-	componentDidUpdate() {
-		if(this.tout)
-			clearTimeout(this.tout);
-		this.tout = setTimeout(() => {
-			if(this.simulation)
-				this.setState({particles: this.simulation.particlesCount()});
-		}, 1000) as any;
-	}
-
-	render() {
-		return <>
-			<canvas width={MAP_SIZE} height={MAP_SIZE} ref={el => this.canv = el}></canvas>
-			<span style={{float: 'right'}}>
-				<div>Particles: {this.state.particles}</div>
-				<div>Max particles: <input type='number' value={this.state.max_particles} 
-					placeholder='max particles' 
-					onChange={(a) => {
-						//@ts-ignore
-						let v: number = a.nativeEvent.target.value;
-						this.setState({max_particles: v});
-						if(this.simulation)
-							this.simulation.setMaxParticles(v);
-					}} /></div>
-			</span>
-		</>;
-	}
-}
+	increaseParticles();
+});
