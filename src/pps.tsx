@@ -230,8 +230,11 @@ window.addEventListener('load', () => {
 	let max_particles = DEFAULT_MAX_PARTICLES;
 
 	let page = document.getElementById('page');
-	if(!page)
-		return;
+	if(!page) {
+		page = document.createElement('div');
+		page.setAttribute('id', 'page');
+		document.body.appendChild(page);
+	}
 
 	let canvas = document.createElement('canvas');
 	canvas.width = MAP_SIZE;
