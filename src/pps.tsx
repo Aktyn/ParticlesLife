@@ -226,7 +226,7 @@ class Simulation {
 	}
 }
 
-window.addEventListener('load', () => {
+let run = () => {
 	let max_particles = DEFAULT_MAX_PARTICLES;
 
 	let page = document.getElementById('page');
@@ -287,4 +287,8 @@ window.addEventListener('load', () => {
 	};
 
 	increaseParticles();
-});
+};
+if(document.body)
+	run();
+else 
+	window.addEventListener('load', run);
